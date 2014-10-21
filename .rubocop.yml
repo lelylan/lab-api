@@ -1,0 +1,11 @@
+Style/Encoding:
+  Enabled: false
+
+Metrics/LineLength:
+  Max: 1150
+
+Style/Documentation:
+  Enabled: false
+
+AllCops:
+  Exclude: ['Guardfile']
