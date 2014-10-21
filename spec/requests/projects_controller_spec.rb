@@ -11,25 +11,28 @@ describe 'ProjectsController' do
   let(:controller) { 'projects' }
   let(:factory)    { 'project'  }
 
-  #describe 'GET /projects' do
 
-    #let!(:resource) { FactoryGirl.create :project, resource_owner_id: user.id }
-    #let(:uri)       { '/projects' }
+  describe 'GET /projects' do
 
-    #it_behaves_like 'a listable resource'
-    #it_behaves_like 'a paginable resource'
-    #it_behaves_like 'a searchable resource', { name: 'Arduino', description: 'Arduino' }
-  #end
+    let!(:resource) { FactoryGirl.create :project, resource_owner_id: user.id }
+    let(:uri)       { '/projects' }
 
-  #context 'GET /projects/:id' do
+    it_behaves_like 'a listable resource'
+    it_behaves_like 'a paginable resource'
+    it_behaves_like 'a searchable resource', { name: 'Arduino', description: 'Arduino' }
+  end
 
-    #let!(:resource) { FactoryGirl.create :project, resource_owner_id: user.id }
-    #let(:uri)       { "/projects/#{resource.id}" }
 
-    #it_behaves_like 'a showable resource'
-    #it_behaves_like 'a not owned resource', 'get(uri, {}, auth_headers)'
-    #it_behaves_like 'a not found resource', 'get(uri, {}, auth_headers)'
-  #end
+  context 'GET /projects/:id' do
+
+    let!(:resource) { FactoryGirl.create :project, resource_owner_id: user.id }
+    let(:uri)       { "/projects/#{resource.id}" }
+
+    it_behaves_like 'a showable resource'
+    it_behaves_like 'a not owned resource', 'get(uri, {}, auth_headers)'
+    it_behaves_like 'a not found resource', 'get(uri, {}, auth_headers)'
+  end
+
 
   context 'POST /projects' do
 
@@ -37,25 +40,56 @@ describe 'ProjectsController' do
     let(:project) { FactoryGirl.create 'project' }
     let(:image)   { Rack::Test::UploadedFile.new('spec/fixtures/images/example.png', 'image/png') }
 
-    let(:params) {
-      {
-        name: 'Name',
-        description: 'Description',
-        image_data: Base64.encode64(image.read),
-        content_type: image.content_type,
-        original_filename: image.original_filename
-      }
-    }
+    let(:params) { {
+      name: 'Name',
+      description: 'Description',
+      image_data: Base64.encode64(image.read),
+      content_type: image.content_type,
+      original_filename: image.original_filename
+    } }
 
-    before { post uri, params.to_json, auth_headers }
-    let(:resource) { Project.last }
+    describe 'with image' do
+      before { post uri, params.to_json, auth_headers }
+      let(:resource) { Project.last }
 
-    it_behaves_like 'a creatable resource'
-    it_behaves_like 'a validated resource', 'post(uri, {}.to_json, auth_headers)', { method: 'POST', error: 'can\'t be blank' }
+      it_behaves_like 'a creatable resource'
+      it_behaves_like 'a validated resource', 'post(uri, {}.to_json, auth_headers)', { method: 'POST', error: 'can\'t be blank' }
 
-    it 'saves the image' do
-      expect(resource.image.url).to match('s3_domain_url')
+      it 'saves the image' do
+        expect(resource.image.url).to match('s3_domain_url')
+      end
+    end
+
+    describe 'with no image' do
+      before { post uri, {name: 'Name', description: 'Description'}.to_json, auth_headers }
+      let(:resource) { Project.last }
+
+      it 'sets the default image' do
+        expect(resource.image.url).to match('missing')
+      end
     end
   end
 
+
+  context 'PUT /projects/:id' do
+
+    let!(:resource) { FactoryGirl.create :project, resource_owner_id: user.id }
+    let(:uri)       { "/projects/#{resource.id}" }
+    let(:params)    { { name: 'updated' } }
+
+    it_behaves_like 'an updatable resource'
+    it_behaves_like 'a not owned resource', 'put(uri, {}, auth_headers)'
+    it_behaves_like 'a not found resource', 'put(uri, {}, auth_headers)'
+    it_behaves_like 'a validated resource', 'put(uri, { name: "" }.to_json, auth_headers)', { method: 'PUT', error: 'can\'t be blank' }
+  end
+
+
+  context 'DELETE /projects/:id' do
+    let!(:resource) { FactoryGirl.create :project, resource_owner_id: user.id }
+    let(:uri)       { "/projects/#{resource.id}" }
+
+    it_behaves_like 'a deletable resource'
+    it_behaves_like 'a not owned resource', 'delete(uri, {}, auth_headers)'
+    it_behaves_like 'a not found resource', 'delete(uri, {}, auth_headers)'
+  end
 end

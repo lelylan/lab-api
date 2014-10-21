@@ -34,3 +34,6 @@
 # Procfile config
 .env
 .production.env
+
+# Image upload
+labs/

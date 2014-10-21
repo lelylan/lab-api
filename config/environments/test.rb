@@ -34,6 +34,12 @@ Labs::Application.configure do
   # Print deprecation notices to the stderr
   config.active_support.deprecation = :stderr
 
+  # Paperclip storage
+  config.paperclip_defaults = {
+    storage: :filesystem,
+    path: ':rails_root/public/:attachment/:id/:style/:basename.:extension'
+  }
+
   # Paperclip logging
   Paperclip.options[:log] = false
 

@@ -4,10 +4,11 @@ module ViewNotFoundMethods
     options = not_found_default.merge(options)
     json = JSON.parse(response.body)
     json = Hashie::Mash.new json
-    json.status.should == 404
-    json.error.code.should == options[:code]
-    json.error.uri.should match Regexp.escape(options[:uri]) if options[:uri].is_a? String
-    json.error.uri.should == options[:uri] if options[:uri].is_a? Array
+
+    expect(json.status).to eq(404)
+    expect(json.error.code).to eq(options[:code])
+    expect(json.error.uri).to match(Regexp.escape(options[:uri])) if options[:uri].is_a? String
+    expect(json.error.uri).to eq(options[:uri]) if options[:uri].is_a? Array
   end
 
   def not_found_default
