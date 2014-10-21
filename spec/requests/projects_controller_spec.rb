@@ -11,46 +11,51 @@ describe 'ProjectsController' do
   let(:controller) { 'projects' }
   let(:factory)    { 'project'  }
 
-  describe 'GET /projects' do
+  #describe 'GET /projects' do
 
-    let!(:resource) { FactoryGirl.create :project, resource_owner_id: user.id }
-    let(:uri)       { '/projects' }
+    #let!(:resource) { FactoryGirl.create :project, resource_owner_id: user.id }
+    #let(:uri)       { '/projects' }
 
-    it_behaves_like 'a listable resource'
-    it_behaves_like 'a paginable resource'
-    it_behaves_like 'a searchable resource', { name: 'Arduino', description: 'Arduino' }
-  end
-
-  context 'GET /projects/:id' do
-
-    let!(:resource) { FactoryGirl.create :project, resource_owner_id: user.id }
-    let(:uri)       { "/projects/#{resource.id}" }
-
-    it_behaves_like 'a showable resource'
-    it_behaves_like 'a not owned resource', 'get(uri, {}, auth_headers)'
-    it_behaves_like 'a not found resource', 'get(uri, {}, auth_headers)'
-  end
-
-
-  #describe '#image' do
-
-    #let(:project) { FactoryGirl.create(:project) }
-    #let(:image)   { Rack::Test::UploadedFile.new('spec/fixtures/images/example.png', 'image/png') }
-
-    #before do
-      #put "/projects/#{project.id}", {
-          #image: {
-            #content_type: image.content_type,
-            #filename: image.original_filename,
-            #file_data: Base64.encode64(image.read)
-          #}
-        #}.to_json, auth_headers
-    #end
-
-    #it 'returns the image URL' do
-      #pp response.body
-      #JSON.parse(response.body).should_not be_nil
-    #end
+    #it_behaves_like 'a listable resource'
+    #it_behaves_like 'a paginable resource'
+    #it_behaves_like 'a searchable resource', { name: 'Arduino', description: 'Arduino' }
   #end
+
+  #context 'GET /projects/:id' do
+
+    #let!(:resource) { FactoryGirl.create :project, resource_owner_id: user.id }
+    #let(:uri)       { "/projects/#{resource.id}" }
+
+    #it_behaves_like 'a showable resource'
+    #it_behaves_like 'a not owned resource', 'get(uri, {}, auth_headers)'
+    #it_behaves_like 'a not found resource', 'get(uri, {}, auth_headers)'
+  #end
+
+  context 'POST /projects' do
+
+    let(:uri)     { '/projects' }
+    let(:project) { FactoryGirl.create 'project' }
+    let(:image)   { Rack::Test::UploadedFile.new('spec/fixtures/images/example.png', 'image/png') }
+
+    let(:params) {
+      {
+        name: 'Name',
+        description: 'Description',
+        image_data: Base64.encode64(image.read),
+        content_type: image.content_type,
+        original_filename: image.original_filename
+      }
+    }
+
+    before { post uri, params.to_json, auth_headers }
+    let(:resource) { Project.last }
+
+    it_behaves_like 'a creatable resource'
+    it_behaves_like 'a validated resource', 'post(uri, {}.to_json, auth_headers)', { method: 'POST', error: 'can\'t be blank' }
+
+    it 'saves the image' do
+      expect(resource.image.url).to match('s3_domain_url')
+    end
+  end
 
 end

@@ -4,7 +4,7 @@ shared_examples_for 'a listable resource' do
 
   it 'shows all owned resources' do
     get uri, {}, auth_headers
-    expect(response.status).to be(200)
+    expect(response.status).to eq(200)
     contains_owned_resource resource
     does_not_contain_resource not_owned
   end
@@ -14,7 +14,7 @@ shared_examples_for 'a showable resource' do
 
   it 'view the owned resource' do
     get uri, {}, auth_headers
-    expect(response.status).to be(200)
+    expect(response.status).to eq(200)
     has_resource resource
   end
 end
@@ -26,7 +26,7 @@ shared_examples_for 'a creatable resource' do
   it 'creates the resource' do
     post uri, params.to_json, auth_headers
     resource = klass.last
-    expect(response.status).to be(201)
+    expect(response.status).to eq(201)
     has_resource resource
   end
 

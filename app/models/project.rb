@@ -4,9 +4,17 @@ class Project
   include Mongoid::Timestamps
   include Mongoid::Paperclip
 
+  # callbacks
+
+  before_save :decode_base64_image
+
   # scopes
 
   scope :recent, -> { order_by(:updated_at.desc) }
+
+  # attr accessor
+
+  attr_accessor :content_type, :original_filename, :image_data
 
   # fields
 
@@ -29,4 +37,21 @@ class Project
   validates :name, presence: true
   validates :description, presence: true
 
+  protected
+
+  def decode_base64_image
+    if image_data && content_type && original_filename
+      decoded_data = Base64.decode64(image_data)
+
+      data = StringIO.new(decoded_data)
+      data.class_eval do
+        attr_accessor :content_type, :original_filename
+      end
+
+      data.content_type = content_type
+      data.original_filename = File.basename(original_filename)
+
+      self.image = data
+    end
+  end
 end

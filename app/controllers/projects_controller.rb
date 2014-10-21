@@ -1,6 +1,5 @@
 class ProjectsController < ApplicationController
-
-  doorkeeper_for :create, :update, :destroy, scopes: [:user]
+  doorkeeper_for :all # , except: :index
 
   before_filter :find_owned_resources
   before_filter :find_resource, only: %w(show update destroy)
@@ -18,9 +17,9 @@ class ProjectsController < ApplicationController
   end
 
   def create
+    process_image
     @project = Project.new(project_params)
     @project.resource_owner_id = current_user.id
-    @project.updated_from = current_user.description
     if @project.save
       render json: @project, status: 201, location: @project.decorate.uri
     else
@@ -44,18 +43,23 @@ class ProjectsController < ApplicationController
 
   private
 
-  def find_from_physical
-    @project = Project.find(params[:id])
-    verify_secret
+  def project_params
+    params.permit(:name, :description, :image_data, :content_type, :original_filename)
+  end
+
+  def process_image
+
+    if params[:image] and params[:image][:data]
+      data = StringIO.new(Base64.decode64(params[:image][:data]))
+      data.class.class_eval { attr_accessor :original_filename, :content_type }
+      data.original_filename = params[:image][:filename]
+      data.content_type = params[:image][:content_type]
+      params[:image] = data
+    end
   end
 
   def find_owned_resources
     @projects = Project.where(resource_owner_id: current_user.id)
-  end
-
-  def find_accessible_resources
-    # TODO there is a bug in mongoid that does not let you use the #in method
-    doorkeeper_token.project_ids.each { |id| @projects = @projects.or(id: id) } if !doorkeeper_token.project_ids.empty?
   end
 
   def find_resource
@@ -74,3 +78,4 @@ class ProjectsController < ApplicationController
     @projects = @projects.gt(id: params[:start]) if params[:start]
   end
 end
+

@@ -70,7 +70,7 @@ Labs::Application.configure do
   # Set the cache store
   config.cache_store = :dalli_store
 
-  # S3 storage
+  # Paperclip storage
   config.paperclip_defaults = {
     storage: :s3,
     s3_credentials: {
