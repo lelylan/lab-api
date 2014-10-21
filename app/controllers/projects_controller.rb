@@ -64,9 +64,7 @@ class ProjectsController < ApplicationController
 
   def search_params
     @projects = @projects.where('name' => /.*#{params[:name]}.*/i) if params[:name]
-    @projects = @projects.where(type: params[:type]) if params[:type]
-    @projects = @projects.where(pending: params[:pending].to_bool) if params[:pending]
-    @projects = @projects.where(category: params[:category])       if params[:category]
+    @projects = @projects.where('description' => /.*#{params[:description]}.*/i) if params[:description]
   end
 
   def pagination
