@@ -21,6 +21,9 @@ class Project
   field :resource_owner_id, type: BSON::ObjectId
   field :name
   field :description
+  field :link
+  field :views, type: Integer, default: 0
+  field :likes, type: Integer, default: 0
 
   # image fields
 
@@ -36,6 +39,7 @@ class Project
 
   validates :name, presence: true
   validates :description, presence: true
+  validates :link, presence: true
 
   protected
 
