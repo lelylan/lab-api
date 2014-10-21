@@ -73,6 +73,6 @@ class ProjectsController < ApplicationController
     params[:per] = (params[:per] || Settings.pagination.per).to_i
     params[:per] = Settings.pagination.per if params[:per] == 0
     params[:per] = Settings.pagination.max_per if params[:per] > Settings.pagination.max_per
-    @projects = @projects.gt(id: find_id(params[:start])) if params[:start]
+    @projects = @projects.gt(id: params[:start]) if params[:start]
   end
 end

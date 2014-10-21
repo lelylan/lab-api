@@ -17,7 +17,7 @@ describe 'ProjectsController' do
     let(:uri)       { '/projects' }
 
     it_behaves_like 'a listable resource'
-    #it_behaves_like 'a paginable resource'
+    it_behaves_like 'a paginable resource'
     #it_behaves_like 'a searchable resource', { name: 'My name is resource', category: 'locks' }
     #it_behaves_like 'a searchable resource on properties'
     #it_behaves_like 'a filterable list'
