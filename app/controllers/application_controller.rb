@@ -26,4 +26,10 @@ class ApplicationController < ActionController::Base
     headers['Access-Control-Max-Age'] = '1728000'
     render text: '', content_type: 'text/plain'
   end
+
+  private
+
+  def current_user
+    return User.find(doorkeeper_token.resource_owner_id)
+  end
 end

@@ -10,6 +10,7 @@ class Project
 
   # fields
 
+  field :resource_owner_id, type: BSON::ObjectId
   field :name
   field :description
 

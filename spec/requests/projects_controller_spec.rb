@@ -8,25 +8,40 @@ describe 'ProjectsController' do
 
   let(:auth_headers)  { {"Content-Type" => "application/json", 'Authorization' => "Bearer #{access_token.token}"} }
 
-  describe '#image' do
+  let(:controller) { 'projects' }
+  let(:factory)    { 'project'  }
 
-    let(:project) { FactoryGirl.create(:project) }
-    let(:image)   { Rack::Test::UploadedFile.new('spec/fixtures/images/example.png', 'image/png') }
+  describe 'GET /projects' do
 
-    before do
-      put "/projects/#{project.id}", {
-          image: {
-            content_type: image.content_type,
-            filename: image.original_filename,
-            file_data: Base64.encode64(image.read)
-          }
-        }.to_json, auth_headers
-    end
+    let!(:resource) { FactoryGirl.create :project, resource_owner_id: user.id }
+    let(:uri)       { '/projects' }
 
-    it 'returns the image URL' do
-      pp response.body
-      JSON.parse(response.body).should_not be_nil
-    end
+    it_behaves_like 'a listable resource'
+    #it_behaves_like 'a paginable resource'
+    #it_behaves_like 'a searchable resource', { name: 'My name is resource', category: 'locks' }
+    #it_behaves_like 'a searchable resource on properties'
+    #it_behaves_like 'a filterable list'
   end
+
+  #describe '#image' do
+
+    #let(:project) { FactoryGirl.create(:project) }
+    #let(:image)   { Rack::Test::UploadedFile.new('spec/fixtures/images/example.png', 'image/png') }
+
+    #before do
+      #put "/projects/#{project.id}", {
+          #image: {
+            #content_type: image.content_type,
+            #filename: image.original_filename,
+            #file_data: Base64.encode64(image.read)
+          #}
+        #}.to_json, auth_headers
+    #end
+
+    #it 'returns the image URL' do
+      #pp response.body
+      #JSON.parse(response.body).should_not be_nil
+    #end
+  #end
 
 end
