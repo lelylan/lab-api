@@ -4,4 +4,4 @@
 
 require File.expand_path('../config/application', __FILE__)
 
-Bodysizes::Application.load_tasks
+Labs::Application.load_tasks

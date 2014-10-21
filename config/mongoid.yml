@@ -4,7 +4,7 @@ development:
       database: labs_development
       hosts:
         - localhost:27017
-    authentication:
+    people:
       database: people_development
       hosts:
         - localhost:27017
@@ -17,7 +17,7 @@ test:
       options:
         max_retries: 1
         retry_interval: 0
-    authentication:
+    people:
       database: people_test
       hosts:
         - localhost:27017
@@ -25,5 +25,5 @@ production:
   sessions:
     default:
       uri: <%= ENV['MONGOLAB_LABS_URL'] %>
-    authentication:
+    people:
       uri: <%= ENV['MONGOLAB_PEOPLE_URL'] %>

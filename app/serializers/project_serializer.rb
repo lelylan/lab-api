@@ -1,5 +1,5 @@
 class ProjectSerializer < ApplicationSerializer
-  attributes  :uri, :name
+  attributes  :uri, :name, :description, :image
 
   def uri
     ProjectDecorator.decorate(object).uri

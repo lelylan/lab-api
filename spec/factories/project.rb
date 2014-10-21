@@ -1,5 +1,6 @@
 FactoryGirl.define do
   factory :project do
-    name 'Connect your first light with Arduino'
+    name 'Arduino Lamp'
+    description 'Connect your first light with an Arduino Yun'
   end
 end

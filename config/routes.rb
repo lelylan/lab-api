@@ -1,5 +1,5 @@
-Lab::Application.routes.draw do
+Labs::Application.routes.draw do
   devise_for :users
 
-  resource :projects
+  resources :projects, defaults: { format: 'json' }
 end

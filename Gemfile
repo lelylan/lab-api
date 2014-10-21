@@ -1,8 +1,8 @@
-source 'https://rubygems.org'
+source 'http://rubygems.org'
 
 ruby '1.9.3'
 
-gem 'rails', '4.0.9'
+gem 'rails', '4.1.6'
 gem 'rails-api'
 gem 'mongoid', '~> 4', github: 'mongoid/mongoid'
 gem 'rack-jsonp-middleware'
@@ -21,6 +21,9 @@ gem 'devise'
 gem 'addressable'
 gem 'jquery-rails'
 gem 'rack-protection'
+gem 'nokogiri'
+gem "mongoid-paperclip", :require => "mongoid_paperclip"
+gem 'aws-sdk'
 
 group :development do
   gem 'rubocop'
@@ -42,7 +45,6 @@ group :development, :test do
   gem 'growl'
   gem 'webmock'
   gem 'rb-fsevent'
-  gem 'dotenv-rails'
 end
 
 group :assets do
