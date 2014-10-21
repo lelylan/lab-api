@@ -31,17 +31,17 @@ shared_examples_for 'a creatable resource' do
   end
 
   it 'stores the resource' do
-    expect { page.driver.post(uri, params.to_json) }.to change { klass.count }.by(1)
+    expect { post(uri, params.to_json, auth_headers) }.to change { klass.count }.by(1)
   end
 end
 
 shared_examples_for 'an updatable resource' do
 
   it 'updates the resource' do
-    page.driver.put uri, params.to_json
+    put uri, params.to_json, auth_headers
     resource.reload
-    page.status_code.should == 200
-    page.should have_content 'updated'
+    expect(response.status).to eq(200)
+    expect(response.body).to match('updated')
     has_resource resource
   end
 end
@@ -52,8 +52,8 @@ shared_examples_for 'a deletable resource' do
   let(:klass)    { controller.classify.constantize }
 
   it 'deletes the resource' do
-    expect { page.driver.delete(uri) }.to change{ klass.count }.by(-1)
-    page.status_code.should == 200
+    expect { delete(uri, {}, auth_headers) }.to change{ klass.count }.by(-1)
+    expect(response.status).to be(200)
     has_resource resource
   end
 end

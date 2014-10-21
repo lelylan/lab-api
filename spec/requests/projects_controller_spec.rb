@@ -21,6 +21,17 @@ describe 'ProjectsController' do
     it_behaves_like 'a searchable resource', { name: 'Arduino', description: 'Arduino' }
   end
 
+  context 'GET /projects/:id' do
+
+    let!(:resource) { FactoryGirl.create :project, resource_owner_id: user.id }
+    let(:uri)       { "/projects/#{resource.id}" }
+
+    it_behaves_like 'a showable resource'
+    it_behaves_like 'a not owned resource', 'get(uri, {}, auth_headers)'
+    it_behaves_like 'a not found resource', 'get(uri, {}, auth_headers)'
+  end
+
+
   #describe '#image' do
 
     #let(:project) { FactoryGirl.create(:project) }
