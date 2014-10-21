@@ -44,7 +44,7 @@ class ProjectsController < ApplicationController
   private
 
   def project_params
-    params.permit(:name, :description, :image_data, :content_type, :original_filename)
+    params.permit(:name, :description, :link, :image_data, :content_type, :original_filename)
   end
 
   def process_image

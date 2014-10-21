@@ -43,6 +43,7 @@ describe 'ProjectsController' do
     let(:params) { {
       name: 'Name',
       description: 'Description',
+      link: 'http://example.com',
       image_data: Base64.encode64(image.read),
       content_type: image.content_type,
       original_filename: image.original_filename
@@ -61,7 +62,7 @@ describe 'ProjectsController' do
     end
 
     describe 'with no image' do
-      before { post uri, {name: 'Name', description: 'Description'}.to_json, auth_headers }
+      before { post uri, { name: 'Name', description: 'Description', link: 'http://example.com' }.to_json, auth_headers }
       let(:resource) { Project.last }
 
       it 'sets the default image' do
