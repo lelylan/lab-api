@@ -19,7 +19,7 @@ describe 'ProjectsController' do
 
     it_behaves_like 'a public listable resource'
     it_behaves_like 'a paginable resource'
-    #it_behaves_like 'a orderable resource'
+    it_behaves_like 'a orderable resource', ['views', 'likes']
     it_behaves_like 'a searchable resource', { name: 'Alice', description: 'Alice' }
   end
 
@@ -31,6 +31,7 @@ describe 'ProjectsController' do
 
     it_behaves_like 'a listable resource'
     it_behaves_like 'a paginable resource'
+    it_behaves_like 'a orderable resource', ['views', 'likes']
     it_behaves_like 'a searchable resource', { name: 'Alice', description: 'Alice' }
   end
 

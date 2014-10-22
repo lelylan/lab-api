@@ -6,6 +6,7 @@ class ProjectsController < ApplicationController
   before_filter :find_owned_resources, except: %w(public show)
   before_filter :find_resource, only: %w(show update destroy)
   before_filter :search_params, only: %w(index public)
+  before_filter :order_params, only: %w(index public)
   before_filter :pagination, only: %w(index public)
 
 
@@ -71,8 +72,8 @@ class ProjectsController < ApplicationController
   end
 
   def order_params
-    @projects = @projects.asc(:views) if params[:order] == 'views'
-    @projects = @projects.asc(:likes) if params[:order] == 'likes'
+    @projects = @projects.desc(:views) if params[:order] == 'views'
+    @projects = @projects.desc(:likes) if params[:order] == 'likes'
   end
 
   def pagination
