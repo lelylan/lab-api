@@ -4,7 +4,6 @@ module Rescueable
   included do
     rescue_from Mongoid::Errors::DocumentNotFound, with: :document_not_found
     rescue_from Mongoid::Errors::Validations,      with: :document_not_valid
-    rescue_from MultiJson::DecodeError,            with: :json_error
   end
 
   def document_not_found
