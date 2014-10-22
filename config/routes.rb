@@ -4,4 +4,7 @@ Labs::Application.routes.draw do
   resources :projects, defaults: { format: 'json' } do
     match :public, via: :get, on: :collection
   end
+
+  get '/tags' => 'tags#index'
+
 end

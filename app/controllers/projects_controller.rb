@@ -51,7 +51,7 @@ class ProjectsController < ApplicationController
   private
 
   def project_params
-    params.permit(:name, :description, :link, :image_data, :content_type, :original_filename)
+    params.permit(:name, :description, :link, :tags, :image_data, :content_type, :original_filename)
   end
 
   def find_public_resources
@@ -69,6 +69,7 @@ class ProjectsController < ApplicationController
   def search_params
     @projects = @projects.where('name' => /.*#{params[:name]}.*/i) if params[:name]
     @projects = @projects.where('description' => /.*#{params[:description]}.*/i) if params[:description]
+    @projects = @projects.tagged_with(params[:tag]) if params[:tag]
   end
 
   def order_params

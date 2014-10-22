@@ -160,6 +160,9 @@ GEM
     minitest (5.4.2)
     mongoid-paperclip (0.0.9)
       paperclip (>= 2.3.6)
+    mongoid_taggable (1.1.1)
+      mongoid (>= 3)
+      rake
     moped (2.0.1)
       bson (~> 2.2)
       connection_pool (~> 2.0)
@@ -327,6 +330,7 @@ DEPENDENCIES
   kaminari
   mongoid (~> 4)!
   mongoid-paperclip
+  mongoid_taggable
   nokogiri
   rack-cors
   rack-jsonp-middleware

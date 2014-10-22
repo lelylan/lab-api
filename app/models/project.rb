@@ -3,6 +3,7 @@ class Project
   include Mongoid::Document
   include Mongoid::Timestamps
   include Mongoid::Paperclip
+  include Mongoid::Taggable
 
   # callbacks
 

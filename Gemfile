@@ -24,6 +24,7 @@ gem 'rack-protection'
 gem 'nokogiri'
 gem "mongoid-paperclip", :require => "mongoid_paperclip"
 gem 'aws-sdk'
+gem 'mongoid_taggable'
 
 group :development do
   gem 'rubocop'
