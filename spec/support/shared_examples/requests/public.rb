@@ -3,9 +3,9 @@ shared_examples_for 'a public listable resource' do
   let!(:not_owned) { FactoryGirl.create factory }
 
   it 'shows all resources (owned and not owned)' do
-    get uri, {}, auth_headers
+    get uri, {}, {}
     expect(response.status).to be(200)
-    expect(JSON.parse(response.body).length).to be(2)
+    expect(JSON.parse(response.body).length).to eq(2)
   end
 end
 
@@ -16,6 +16,6 @@ shared_examples_for 'a public resource' do |action|
 
   it 'does not create a resource' do
     eval action
-    expect(response.status).to be(200)
+    expect(response.status).to eq(200)
   end
 end

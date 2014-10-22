@@ -3,7 +3,5 @@ Labs::Application.routes.draw do
 
   resources :projects, defaults: { format: 'json' } do
     match :public, via: :get, on: :collection
-    match :views, via: :get, on: :collection
-    match :likes, via: :get, on: :collection
   end
 end

@@ -11,9 +11,9 @@ shared_examples_for 'a paginable resource' do
   describe '?start=:id' do
 
     it 'shows the next page' do
-      get uri, {start: resource.id}, auth_headers
+      get uri, { start: resource.id }, auth_headers
       expect(response.status).to eq(200)
-      contains_resource resources.last
+      contains_resource resources.first
       expect(response.body).to_not match(resource.id.to_s)
     end
   end

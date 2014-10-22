@@ -2,30 +2,15 @@ class ProjectsController < ApplicationController
 
   doorkeeper_for :index, :create, :update, :destroy
 
-  before_filter :find_public_resources, only: %w(public popular show)
-  before_filter :find_owned_resources,  except: %w(public popular show)
+  before_filter :find_public_resources, only: %w(public show)
+  before_filter :find_owned_resources, except: %w(public show)
   before_filter :find_resource, only: %w(show update destroy)
-  before_filter :search_params, only: %w(index)
-  before_filter :pagination,    only: %w(index)
+  before_filter :search_params, only: %w(index public)
+  before_filter :pagination, only: %w(index public)
 
 
   def index
-    @projects = @projects.desc(:id).limit(params[:per])
-    render json: @projects
-  end
-
-  def public
-    @projects = @projects.limit(params[:per])
-    render json: @projects
-  end
-
-  def views
-    @projects = @projects.asc(:views).limit(params[:per])
-    render json: @projects
-  end
-
-  def likes
-    @projects = @projects.asc(:likes).limit(params[:per])
+    @projects = @projects.asc(:id).limit(params[:per])
     render json: @projects
   end
 
@@ -56,6 +41,11 @@ class ProjectsController < ApplicationController
     @project.destroy
   end
 
+  def public
+    @projects = @projects.limit(params[:per])
+    render json: @projects
+  end
+
 
   private
 
@@ -78,6 +68,11 @@ class ProjectsController < ApplicationController
   def search_params
     @projects = @projects.where('name' => /.*#{params[:name]}.*/i) if params[:name]
     @projects = @projects.where('description' => /.*#{params[:description]}.*/i) if params[:description]
+  end
+
+  def order_params
+    @projects = @projects.asc(:views) if params[:order] == 'views'
+    @projects = @projects.asc(:likes) if params[:order] == 'likes'
   end
 
   def pagination
