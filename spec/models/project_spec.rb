@@ -16,11 +16,17 @@ describe Project do
 
     describe 'when searching' do
 
-      describe 'with a tag' do
+      it 'gets the tagged resources' do
+        expect(Project.all.tagged_with('foo').count).to eq(1)
+      end
+    end
 
-        it 'gets the tagged resources' do
-          expect(Project.all.tagged_with('foo').count).to eq(1)
-        end
+    describe 'with multiple resources' do
+
+      before { FactoryGirl.create :project, tags: 'bar,baz' }
+
+      it 'gets the weight tags' do
+        expect(Project.tags_with_weight).to eq([['bar', 2.0], ['baz', 1.0], ['foo', 1.0]])
       end
     end
   end

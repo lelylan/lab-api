@@ -1,0 +1,2 @@
+class TagSerializer < ApplicationSerializer
+end
