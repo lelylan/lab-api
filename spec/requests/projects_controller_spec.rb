@@ -23,6 +23,17 @@ describe 'ProjectsController' do
   end
 
 
+  context 'GET /projects/public' do
+
+    let!(:resource) { FactoryGirl.create :project, resource_owner_id: user.id }
+    let(:uri)       { '/projects/public' }
+
+    it_behaves_like 'a public listable resource'
+    it_behaves_like 'a paginable resource'
+    #it_behaves_like 'a searchable resource', { name: 'Arduino', description: 'Arduino' }
+  end
+
+
   context 'GET /projects/:id' do
 
     let!(:resource) { FactoryGirl.create :project, resource_owner_id: user.id }

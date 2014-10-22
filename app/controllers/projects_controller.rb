@@ -15,12 +15,17 @@ class ProjectsController < ApplicationController
   end
 
   def public
-    @projects = @projects.desc(:updated_at).limit(params[:per])
+    @projects = @projects.limit(params[:per])
     render json: @projects
   end
 
-  def popular
-    @projects = @projects.where(popular: true).desc(:updated_at).limit(params[:per])
+  def views
+    @projects = @projects.asc(:views).limit(params[:per])
+    render json: @projects
+  end
+
+  def likes
+    @projects = @projects.asc(:likes).limit(params[:per])
     render json: @projects
   end
 

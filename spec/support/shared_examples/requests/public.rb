@@ -5,7 +5,7 @@ shared_examples_for 'a public listable resource' do
   it 'shows all resources (owned and not owned)' do
     get uri, {}, auth_headers
     expect(response.status).to be(200)
-    JSON.parse(response.body.length).to be(2)
+    expect(JSON.parse(response.body).length).to be(2)
   end
 end
 
