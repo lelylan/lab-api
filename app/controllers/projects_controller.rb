@@ -1,7 +1,9 @@
 class ProjectsController < ApplicationController
-  doorkeeper_for :all # , except: :index
 
-  before_filter :find_owned_resources
+  doorkeeper_for :index, :create, :update, :destroy
+
+  before_filter :find_public_resources, only: %w(public popular show)
+  before_filter :find_owned_resources,  except: %w(public popular show)
   before_filter :find_resource, only: %w(show update destroy)
   before_filter :search_params, only: %w(index)
   before_filter :pagination,    only: %w(index)
@@ -12,12 +14,21 @@ class ProjectsController < ApplicationController
     render json: @projects
   end
 
+  def public
+    @projects = @projects.desc(:updated_at).limit(params[:per])
+    render json: @projects
+  end
+
+  def popular
+    @projects = @projects.where(popular: true).desc(:updated_at).limit(params[:per])
+    render json: @projects
+  end
+
   def show
     render json: @project if stale?(@project)
   end
 
   def create
-    process_image
     @project = Project.new(project_params)
     @project.resource_owner_id = current_user.id
     if @project.save
@@ -47,15 +58,8 @@ class ProjectsController < ApplicationController
     params.permit(:name, :description, :link, :image_data, :content_type, :original_filename)
   end
 
-  def process_image
-
-    if params[:image] and params[:image][:data]
-      data = StringIO.new(Base64.decode64(params[:image][:data]))
-      data.class.class_eval { attr_accessor :original_filename, :content_type }
-      data.original_filename = params[:image][:filename]
-      data.content_type = params[:image][:content_type]
-      params[:image] = data
-    end
+  def find_public_resources
+    @projects = Project.all
   end
 
   def find_owned_resources

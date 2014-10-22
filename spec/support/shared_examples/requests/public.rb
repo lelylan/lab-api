@@ -3,9 +3,9 @@ shared_examples_for 'a public listable resource' do
   let!(:not_owned) { FactoryGirl.create factory }
 
   it 'shows all resources (owned and not owned)' do
-    page.driver.get uri
-    page.status_code.should == 200
-    JSON.parse(page.source).should have(2).items
+    get uri, {}, auth_headers
+    expect(response.status).to be(200)
+    JSON.parse(response.body.length).to be(2)
   end
 end
 
@@ -16,6 +16,6 @@ shared_examples_for 'a public resource' do |action|
 
   it 'does not create a resource' do
     eval action
-    page.status_code.should == 200
+    expect(response.status).to be(200)
   end
 end
