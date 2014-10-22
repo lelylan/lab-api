@@ -32,7 +32,6 @@
 /config/environments/*.local.yml
 
 # Procfile config
-.env
 .production.env
 
 # Image upload
